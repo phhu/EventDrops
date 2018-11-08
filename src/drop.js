@@ -1,7 +1,13 @@
 import uniqBy from 'lodash.uniqby';
+import groupBy from 'lodash.groupby';
 
+const overlappingDropIdentity = data => Math.round(xScale(dropDate(data)));
 const filterOverlappingDrop = (xScale, dropDate) => d =>
-    uniqBy(d.data, data => Math.round(xScale(dropDate(data))));
+    uniqBy(d.data, overlappingDropIdentity);
+
+const groupOverlappingDrop = (xScale, dropDate) => d =>
+    groupBy(d.data, overlappingDropIdentity)
+    .reduce( (acc,i) => (i[0]['_allEvents'] = i,acc.concat(i[0])), [] );
 
 export default (config, xScale) => selection => {
     const {
@@ -17,7 +23,8 @@ export default (config, xScale) => selection => {
 
     const drops = selection
         .selectAll('.drop')
-        .data(filterOverlappingDrop(xScale, dropDate));
+        //.data(filterOverlappingDrop(xScale, dropDate));
+        .data(groupOverlappingDrop(xScale, dropDate));
 
     drops
         .enter()
