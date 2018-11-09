@@ -19,7 +19,7 @@
     "debounce": "1.0.0",
     "lodash.defaultsdeep": "^4.6.0",
     "lodash.uniqby": "^4.7.0",
-    "lodash.groupby": "^4.7.0"
+    "lodash.groupby": "^4.6.0"
   },
   "devDependencies": {
     "async": "2.0.1",
