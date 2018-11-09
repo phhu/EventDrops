@@ -9,7 +9,7 @@ run: ## Run the webpack-dev-server
 build: install ## Webpack build the project
 	rm -rf dist/
 	mkdir -p dist
-	./node_modules/.bin/rollup -c
+	"./node_modules/.bin/rollup" -c
 
 publish: test build ## Publish current version of EventDrops (need to set a VERSION=[major|minor|patch])
 	@if [ -z ${VERSION} ]; then \
