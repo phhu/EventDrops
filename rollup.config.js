@@ -23,7 +23,7 @@ export default {
         commonjs({
             include: 'node_modules/**',
         }),
-        uglify(),
+        //uglify(),
     ],
     external: ['d3'],
     dest: 'dist/index.js',

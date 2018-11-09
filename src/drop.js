@@ -2,12 +2,18 @@ import uniqBy from 'lodash.uniqby';
 import groupBy from 'lodash.groupby';
 
 const overlappingDropIdentity = data => Math.round(xScale(dropDate(data)));
+
 const filterOverlappingDrop = (xScale, dropDate) => d =>
-    uniqBy(d.data, overlappingDropIdentity);
+    uniqBy(d.data, data => xScale(dropDate(data)));
 
 const groupOverlappingDrop = (xScale, dropDate) => d =>
-    groupBy(d.data, overlappingDropIdentity)
-    .reduce( (acc,i) => (i[0]['_allEvents'] = i,acc.concat(i[0])), [] );
+    Object.values(
+        groupBy(d.data, data => Math.round(xScale(dropDate(data))))
+    ).reduce((acc, i) => {
+        i.sort((a, b) => dropDate(a) - dropDate(b));
+        i[0]['_allEvents'] = i;
+        return acc.concat(i[0]);
+    }, []);
 
 export default (config, xScale) => selection => {
     const {
@@ -28,15 +34,21 @@ export default (config, xScale) => selection => {
 
     drops
         .enter()
-        .append('circle')
+        .append('ellipse')
         .classed('drop', true)
-        .attr('r', dropRadius)
+        .attr('ry', dropRadius)
+        .attr('rx', 5)
         .attr('fill', dropColor)
         .on('click', onClick)
         .on('mouseover', onMouseOver)
         .on('mouseout', onMouseOut)
         .merge(drops)
         .attr('cx', d => xScale(dropDate(d)));
+
+    drops
+        .attr('ry', dropRadius)
+        .attr('rx', 5)
+        .attr('fill', dropColor);
 
     drops
         .exit()

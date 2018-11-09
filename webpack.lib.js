@@ -11,6 +11,10 @@ module.exports = {
         library: 'eventDrops',
         libraryTarget: 'umd',
     },
+    mode: 'development',
+    optimization: {
+        minimize: false,
+    },
     externals: {
         d3: 'd3',
     },
